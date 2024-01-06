@@ -1,3 +1,9 @@
+<?php
+include('connection.php');
+$listGenre = $mysqlClient->prepare('select * from music_genre');
+$listGenre->execute();
+?>
+
 <!-- FORMULAIRE GROUPE -->
 <div class="group_form_container">
 
@@ -10,6 +16,18 @@
         <div class="mb-3">
             <label for="grp_createdate" class="form-label">Date de création du groupe</label>
             <input type="date" class="form-control" id="grp_createdate">
+        </div>
+        <div class="mb-3">
+
+            <select class="form-select" aria-label="metal genre select">
+                <option selected>Genre de musique</option>
+                <?php
+                foreach ($listGenre as $genre) {
+                ?><option value="<?php echo $genre['mgr_id'] ?>"><?php echo $genre['mgr_name'] ?></option>
+                <?php
+                }
+                ?>
+            </select>
         </div>
         <!-- <div class="mb-3 form-check">
             <input type="checkbox" class="form-check-input" id="exampleCheck1">
