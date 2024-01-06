@@ -1,11 +1,12 @@
 <?php
+// recupere la liste des genres de musiques
 include('connection.php');
 $listGenre = $mysqlClient->prepare('select * from music_genre');
 $listGenre->execute();
 $genres = $listGenre->fetchAll();
 ?>
 
-<!-- FORMULAIRE GROUPE -->
+<!-- FORMULAIRE AJOUT GROUPE -->
 <div class="group_form_container">
     <h5 class="form_title">Ajouter un groupe</h5>
     <form action="creategroup/post_create_group.php" method="POST">

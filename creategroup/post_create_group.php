@@ -16,7 +16,7 @@ if ($_POST['mgr_id'] == "Genre de musique") {
     return;
 }
 
-
+// initialisation des variables
 $mgr_id = $_POST['mgr_id'];
 $grp_name = $_POST['grp_name'];
 $grp_createdate = $_POST['grp_createdate'];
@@ -28,17 +28,15 @@ $insertGroup->execute([
     'grp_createdate' => $grp_createdate,
 ]);
 
-
+// récupère l'id du groupe que l'on vient d'ajouter
 $getNewGroupId = $mysqlClient->prepare('select g.grp_id from groupe g where g.grp_name = :grp_name');
 $getNewGroupId->execute([
     'grp_name' => $grp_name
 ]);
-
 $result = $getNewGroupId->fetch(PDO::FETCH_ASSOC);
 $newGroupId = $result['grp_id'];
 
-echo $newGroupId;
-
+// affecte ce groupe au genre de musique selectionné
 $addGroupGenre = $mysqlClient->prepare('insert into grp_genre (grp_id, mgr_id) values (:newGroupId, :mgr_id)');
 $addGroupGenre->execute([
     'newGroupId' => $newGroupId,
