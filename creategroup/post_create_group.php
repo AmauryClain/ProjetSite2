@@ -42,3 +42,6 @@ $addGroupGenre->execute([
     'newGroupId' => $newGroupId,
     'mgr_id' => $mgr_id
 ]);
+?>
+
+<p>Le groupe à bien été ajouté !</p>
