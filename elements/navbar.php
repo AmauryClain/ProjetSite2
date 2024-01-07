@@ -18,10 +18,10 @@
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                     <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" href="http://localhost:8888/ProjetSite2/groupe.php">Ajouter un groupe</a>
+                        <a class="nav-link active" aria-current="page" href="http://localhost:8888/ProjetSite2/groupe.php">Ajouter des informations</a>
+                    </li>
                     </li>
                 </ul>
-
             </div>
         </div>
     </nav>
