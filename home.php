@@ -1,8 +1,6 @@
 <?php
 include('elements/navbar.php');
 include('connection.php');
-$displayGroups = $mysqlClient->prepare('select * from groupe');
-$displayGroups->execute();
 
 
 @$keywords = $_GET['keywords'];
@@ -41,8 +39,3 @@ if (isset($submit) && !empty(trim($keywords))) {
         <?php } ?>
     </div>
 <?php } ?>
-<?php
-foreach ($displayGroups as $group) {
-    echo $group['grp_name'];
-};
-?>
