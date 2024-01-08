@@ -18,10 +18,12 @@ if (isset($submit) && !empty(trim($keywords)) && $searchType == "grp") {
         $kw[$i] = "g.grp_name like '%" . $words[$i] . "%'";
     }
     include('connection.php');
-    $res = $mysqlClient->prepare('select g.grp_name from groupe g where ' . implode(' or ', $kw) . ' order by g.grp_name asc');
+    $res = $mysqlClient->prepare('select g.grp_createdate, g.grp_name, mgr_name from groupe g inner join grp_genre gg on gg.grp_id = g.grp_id inner join music_genre mg on mg.mgr_id = gg.mgr_id where ' . implode(' or ', $kw) . ' order by g.grp_name asc');
     $res->setFetchMode(PDO::FETCH_ASSOC);
     $res->execute();
     $tab = $res->fetchAll();
+
+
     $displayGrp = "yes";
 };
 
@@ -38,7 +40,7 @@ if ($searchType == "mem") {
         }, $words);
 
         include('connection.php');
-        $res = $mysqlClient->prepare('SELECT m.mbr_firstName, m.mbr_lastName, m.mbr_nickname FROM membre m WHERE ' . implode(' OR ', $kw));
+        $res = $mysqlClient->prepare('SELECT m.mbr_firstName, m.mbr_lastName, m.mbr_nickname, mbr_role, g.grp_name, m.mbr_birthdate, m.mbr_joinDate FROM membre m inner join grp_membre gm on gm.mbr_id = m.mbr_id inner join groupe g on g.grp_id = gm.grp_id WHERE ' . implode(' OR ', $kw));
         $res->setFetchMode(PDO::FETCH_ASSOC);
         $res->execute();
         $tab = $res->fetchAll();
@@ -55,7 +57,7 @@ if (isset($submit) && !empty(trim($keywords)) && $searchType == "alb") {
         $kw[$i] = "a.alb_name like '%" . $words[$i] . "%'";
     }
     include('connection.php');
-    $res = $mysqlClient->prepare('select a.alb_name from album a where ' . implode(' or ', $kw));
+    $res = $mysqlClient->prepare('select a.alb_name, a.alb_createdate, g.grp_name from album a inner join groupe g on g.grp_id = a.grp_id where ' . implode(' or ', $kw));
     $res->setFetchMode(PDO::FETCH_ASSOC);
     $res->execute();
     $tab = $res->fetchAll();
@@ -65,68 +67,64 @@ if (isset($submit) && !empty(trim($keywords)) && $searchType == "alb") {
 
 
 ?>
+<div class="mx-5 h-100vh">
 
-<h5>Que souhaitez-vous rechercher ?</h5>
-<form class="btnsearch" method="get" action="">
-    <input type="hidden" name="searchType" value="">
-    <button name="searchType" value="grp" type="submit" class="btn btn-secondary">Groupe</button>
-    <button name="searchType" value="mem" type="submit" class="btn btn-secondary">Musicien</button>
-    <button name="searchType" value="alb" type="submit" class="btn btn-secondary">Album</button>
-</form>
+    <h5 class="my-1">Que souhaitez-vous rechercher ?</h5>
+    <form class="btnsearch my-3" method="get" action="">
+        <input type="hidden" name="searchType" value="">
+        <button name="searchType" value="grp" type="submit" class="btn btn-secondary">Groupe</button>
+        <button name="searchType" value="mem" type="submit" class="btn btn-secondary">Musicien</button>
+        <button name="searchType" value="alb" type="submit" class="btn btn-secondary">Album</button>
+    </form>
 
-<form class="d-flex" role="search" name="fo" method="get" action="" <?php echo ($displaySearch == "yes") ? 'style="display: flex !important;"' : 'style="display: none !important;"'; ?>>
-    <input type="hidden" name="searchType" value="<?php echo htmlspecialchars($searchType); ?>">
-    <input class="form-control me-2" type="search" name="keywords" placeholder="Search" value="<?php echo $keywords ?>" aria-label="Search">
-    <button class="btn btn-outline-success" name="submit" type="submit">Search</button>
-</form>
-<!-- Affiche les groupes -->
-<?php if (@$displayGrp == "yes") {
-?>
-    <div class="searchresults">
+    <form class="my-3 d-flex" role="search" name="fo" method="get" action="" <?php echo ($displaySearch == "yes") ? 'style="display: flex !important;"' : 'style="display: none !important;"'; ?>>
+        <input type="hidden" name="searchType" value="<?php echo htmlspecialchars($searchType); ?>">
+        <input class="form-control me-2" type="search" name="keywords" placeholder="Search" value="<?php echo $keywords ?>" aria-label="Search">
+        <button class="btn btn-outline-success" name="submit" type="submit">Search</button>
+    </form>
+    <!-- Affiche les groupes -->
+    <?php if (@$displayGrp == "yes") {
+    ?>
         <div id="nbrResult"><?= count($tab) . " " . (count($tab) > 1 ? "résultats trouvés" : "résultat trouvé") ?></div>
-        <?php for ($i = 0; $i < count($tab); $i++) { ?>
-            <div class="card" style="width: 18rem;">
-                <img src="..." class="card-img-top" alt="...">
-                <div class="card-body">
-                    <h5 class="card-title"><?php echo $tab[$i]["grp_name"] ?></h5>
-                    <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                    <a href="#" class="btn btn-primary">Go somewhere</a>
+        <div class="searchresults d-flex">
+            <?php for ($i = 0; $i < count($tab); $i++) { ?>
+                <div class="card m-2" style="width: 18rem;">
+                    <div class="card-body">
+                        <h5 class="card-title"><?php echo $tab[$i]["grp_name"] ?></h5>
+                        <p class="card-text"><strong>Genre : </strong><?php echo $tab[$i]["mgr_name"] ?><br /><strong>Date de création : </strong><?php echo $tab[$i]["grp_createdate"] ?></p>
+                    </div>
                 </div>
-            </div>
-        <?php } ?>
-    </div>
-    <!-- Affiche les musiciens -->
-<?php } ?>
-<?php if (@$displayMem == "yes") {
-?>
-    <div class="searchresults">
+            <?php } ?>
+        </div>
+        <!-- Affiche les musiciens -->
+    <?php } ?>
+    <?php if (@$displayMem == "yes") {
+    ?>
         <div id="nbrResult"><?= count($tab) . " " . (count($tab) > 1 ? "résultats trouvés" : "résultat trouvé") ?></div>
-        <?php for ($i = 0; $i < count($tab); $i++) { ?>
-            <div class="card" style="width: 18rem;">
-                <img src="..." class="card-img-top" alt="...">
-                <div class="card-body">
-                    <h5 class="card-title"><?php echo $tab[$i]["mbr_firstName"] . ' ' . $tab[$i]["mbr_lastName"] ?></h5>
-                    <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                    <a href="#" class="btn btn-primary">Go somewhere</a>
+        <div class="searchresults d-flex">
+            <?php for ($i = 0; $i < count($tab); $i++) { ?>
+                <div class="card m-2" style="width: 18rem;">
+                    <div class="card-body">
+                        <h5 class="card-title"><?php echo $tab[$i]["mbr_firstName"] . ' ' . $tab[$i]["mbr_lastName"] ?></h5>
+                        <p class="card-text"><strong>Surnom : </strong><?php echo $tab[$i]["mbr_nickname"] ?><br /><strong>Date de naissance : </strong><?php echo $tab[$i]["mbr_birthdate"] ?><br /><strong>Role : </strong><?php echo $tab[$i]["mbr_role"] ?><br /><strong>Groupe : </strong><?php echo $tab[$i]["grp_name"] ?><br /><strong>Rejoint le groupe le : </strong><?php echo $tab[$i]["mbr_joinDate"] ?></p>
+                    </div>
                 </div>
-            </div>
-        <?php } ?>
-    </div>
-<?php } ?>
-<!-- Affiche les albums -->
-<?php if (@$displayAlb == "yes") {
-?>
-    <div class="searchresults">
+            <?php } ?>
+        </div>
+    <?php } ?>
+    <!-- Affiche les albums -->
+    <?php if (@$displayAlb == "yes") {
+    ?>
         <div id="nbrResult"><?= count($tab) . " " . (count($tab) > 1 ? "résultats trouvés" : "résultat trouvé") ?></div>
-        <?php for ($i = 0; $i < count($tab); $i++) { ?>
-            <div class="card" style="width: 18rem;">
-                <img src="..." class="card-img-top" alt="...">
-                <div class="card-body">
-                    <h5 class="card-title"><?php echo $tab[$i]["alb_name"] ?></h5>
-                    <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                    <a href="#" class="btn btn-primary">Go somewhere</a>
+        <div class="searchresults d-flex">
+            <?php for ($i = 0; $i < count($tab); $i++) { ?>
+                <div class="card m-2" style="width: 18rem;">
+                    <div class="card-body">
+                        <h5 class="card-title"><?php echo $tab[$i]["alb_name"] ?></h5>
+                        <p class="card-text"><strong>Sortie : </strong><?php echo $tab[$i]["alb_createdate"] ?><br /><strong>Groupe : </strong><?php echo $tab[$i]["grp_name"] ?></p>
+                    </div>
                 </div>
-            </div>
-        <?php } ?>
-    </div>
-<?php } ?>
+            <?php } ?>
+        </div>
+    <?php } ?>
+</div>
