@@ -136,8 +136,6 @@ $groups = $listGroup->fetchAll();
         // affichage
         var form = document.getElementById("groupForm");
         // element à cacher
-        var memdiv = document.getElementById("memdiv");
-        var albdiv = document.getElementById("albdiv");
         var memberCheck = document.getElementById("memberCheck");
         var albumCheck = document.getElementById("albumCheck");
         var albumform = document.getElementById("albumForm");
@@ -149,12 +147,10 @@ $groups = $listGroup->fetchAll();
             albumCheck.checked = false;
             memberform.style.display = "none";
             albumform.style.display = "none";
-            memdiv.style.display = "none";
-            albdiv.style.display = "none";
+
         } else {
             form.style.display = "none";
-            memdiv.style.display = "block";
-            albdiv.style.display = "block";
+
         }
     }
 
@@ -164,8 +160,6 @@ $groups = $listGroup->fetchAll();
         // affichage
         var form = document.getElementById("memberForm");
         // element à cacher
-        var grpdiv = document.getElementById("grpdiv");
-        var albdiv = document.getElementById("albdiv");
         var groupCheck = document.getElementById("groupCheck");
         var albumCheck = document.getElementById("albumCheck");
         var groupform = document.getElementById("groupForm");
@@ -177,12 +171,10 @@ $groups = $listGroup->fetchAll();
             albumCheck.checked = false;
             albumform.style.display = "none";
             groupform.style.display = "none";
-            grpdiv.style.display = "none";
-            albdiv.style.display = "none";
+
         } else {
             form.style.display = "none";
-            grpdiv.style.display = "block";
-            albdiv.style.display = "block";
+
         }
     }
 
@@ -192,8 +184,7 @@ $groups = $listGroup->fetchAll();
         // affichage
         var form = document.getElementById("albumForm");
         // element à cacher
-        var grpdiv = document.getElementById("grpdiv");
-        var memdiv = document.getElementById("memdiv");
+
         var groupCheck = document.getElementById("groupCheck");
         var memberCheck = document.getElementById("memberCheck");
         var groupform = document.getElementById("groupForm");
@@ -205,12 +196,10 @@ $groups = $listGroup->fetchAll();
             memberCheck.checked = false;
             groupform.style.display = "none";
             memberform.style.display = "none";
-            grpdiv.style.display = "none";
-            memdiv.style.display = "none";
+
         } else {
             form.style.display = "none";
-            grpdiv.style.display = "block";
-            memdiv.style.display = "block";
+
         }
     }
 </script>
