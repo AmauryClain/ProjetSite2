@@ -18,7 +18,10 @@ if (isset($submit) && !empty(trim($keywords)) && $searchType == "grp") {
         $kw[$i] = "g.grp_name like '%" . $words[$i] . "%'";
     }
     include('connection.php');
-    $res = $mysqlClient->prepare('select g.grp_createdate, g.grp_name, mgr_name from groupe g inner join grp_genre gg on gg.grp_id = g.grp_id inner join music_genre mg on mg.mgr_id = gg.mgr_id where ' . implode(' or ', $kw) . ' order by g.grp_name asc');
+    $res = $mysqlClient->prepare('select g.grp_createdate, g.grp_name, mgr_name 
+    from groupe g 
+    inner join grp_genre gg on gg.grp_id = g.grp_id inner join music_genre mg on mg.mgr_id = gg.mgr_id 
+    where ' . implode(' or ', $kw) . ' order by g.grp_name asc');
     $res->setFetchMode(PDO::FETCH_ASSOC);
     $res->execute();
     $tab = $res->fetchAll();
@@ -33,20 +36,25 @@ if (isset($submit) && !empty(trim($keywords)) && $searchType == "grp") {
 if ($searchType == "mem") {
     $displaySearch = "yes";
 
-    if (isset($submit) && !empty(trim($keywords))) {
-        $words = explode(" ", trim($keywords));
-        $kw = array_map(function ($word) {
-            return "CONCAT(m.mbr_firstName, ' ', m.mbr_lastName) LIKE '%" . $word . "%'";
-        }, $words);
-
-        include('connection.php');
-        $res = $mysqlClient->prepare('SELECT m.mbr_firstName, m.mbr_lastName, m.mbr_nickname, mbr_role, g.grp_name, m.mbr_birthdate, m.mbr_joinDate FROM membre m inner join grp_membre gm on gm.mbr_id = m.mbr_id inner join groupe g on g.grp_id = gm.grp_id WHERE ' . implode(' OR ', $kw));
-        $res->setFetchMode(PDO::FETCH_ASSOC);
-        $res->execute();
-        $tab = $res->fetchAll();
-        $displayMem = "yes";
-    }
 }
+if (isset($submit) && !empty(trim($keywords)) && $searchType == "mem") {
+    $words = explode(" ", trim($keywords));
+    $kw = array_map(function ($word) {
+        return "CONCAT(m.mbr_firstName, ' ', m.mbr_lastName) LIKE '%" . $word . "%'";
+    }, $words);
+
+    include('connection.php');
+    $res = $mysqlClient->prepare('SELECT m.mbr_firstName, m.mbr_lastName, m.mbr_nickname, mbr_role, g.grp_name, m.mbr_birthdate, m.mbr_joinDate 
+    FROM membre m 
+    inner join grp_membre gm on gm.mbr_id = m.mbr_id inner join groupe g on g.grp_id = gm.grp_id 
+    WHERE ' . implode(' OR  :kw'));
+    $res->setFetchMode(PDO::FETCH_ASSOC);
+    $res->execute([
+        'kw' => $kw,
+    ]);
+    $tab = $res->fetchAll();
+    $displayMem = "yes";
+};
 // Recherche albums
 if ($searchType == "alb") {
     $displaySearch = "yes";
@@ -57,7 +65,9 @@ if (isset($submit) && !empty(trim($keywords)) && $searchType == "alb") {
         $kw[$i] = "a.alb_name like '%" . $words[$i] . "%'";
     }
     include('connection.php');
-    $res = $mysqlClient->prepare('select a.alb_name, a.alb_createdate, g.grp_name from album a inner join groupe g on g.grp_id = a.grp_id where ' . implode(' or ', $kw));
+    $res = $mysqlClient->prepare('select a.alb_name, a.alb_createdate, g.grp_name 
+    from album a inner join groupe g on g.grp_id = a.grp_id 
+    where ' . implode(' or ', $kw));
     $res->setFetchMode(PDO::FETCH_ASSOC);
     $res->execute();
     $tab = $res->fetchAll();
@@ -82,6 +92,7 @@ if (isset($submit) && !empty(trim($keywords)) && $searchType == "alb") {
         <input class="form-control me-2" type="search" name="keywords" placeholder="Search" value="<?php echo $keywords ?>" aria-label="Search">
         <button class="btn btn-outline-success" name="submit" type="submit">Search</button>
     </form>
+
     <!-- Affiche les groupes -->
     <?php if (@$displayGrp == "yes") {
     ?>
