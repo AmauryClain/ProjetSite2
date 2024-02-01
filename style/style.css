@@ -5,13 +5,17 @@
 #9EC8B9 */
 
 body {
-    background: linear-gradient(60deg, #092635 0%, #122c2c 100%) !important;
+    background: linear-gradient(60deg, #092635 0%, #153232 100%) !important;
 }
 
-.homemainediv {
-    background-color: #09263538;
+.homemaindiv {
+    color: #ceffeecc;
+    background: linear-gradient(60deg, #9ec8b91d 0%, #9ec8b93f 100%) !important;
+    border-radius: 5px !important;
+    vertical-align: center;
+    padding: 5px;
+    margin-top: 20px;
 }
-
 .navbar {
     background: linear-gradient(60deg, #9ec8b91d 0%, #9ec8b93f 100%) !important;
     transition: background-position 0.5s ease-in-out !important;
@@ -33,7 +37,26 @@ body {
     background-color: #9ec8b921 !important;
 }
 .btnsearch .btn:hover, .searchdiv .btn:hover {
-    color: #ceffeecc !important;
     border: none !important;
     background-color: #9ec8b93c !important;
+}
+
+.card {
+    background-color: #9ec8b921 !important; 
+    color: #ceffeecc !important;
+    transition: all 0.07s ease-out;
+}
+
+.card:hover {
+    background-color: #9ec8b93c !important;
+    transition: all 0.07s ease-in;
+}
+
+/* groupe.php */
+.form-check {
+    color: #ceffeecc;
+}
+
+.group_form_container {
+    color: #ceffeecc;
 }
