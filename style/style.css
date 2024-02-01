@@ -1,0 +1,39 @@
+/* Colors : */
+/* #092635
+#1B4242
+#5C8374
+#9EC8B9 */
+
+body {
+    background: linear-gradient(60deg, #092635 0%, #122c2c 100%) !important;
+}
+
+.homemainediv {
+    background-color: #09263538;
+}
+
+.navbar {
+    background: linear-gradient(60deg, #9ec8b91d 0%, #9ec8b93f 100%) !important;
+    transition: background-position 0.5s ease-in-out !important;
+    background-size: 200% 200% !important;
+}
+
+.navbar a {
+    font-weight: 700;
+    color: #ceffeecc !important;
+}
+
+.navbar:hover {
+    background-position: 50% 0 !important;
+}
+
+.btnsearch .btn, .searchdiv .btn {
+    color: #ceffeecc !important;
+    border: none !important;
+    background-color: #9ec8b921 !important;
+}
+.btnsearch .btn:hover, .searchdiv .btn:hover {
+    color: #ceffeecc !important;
+    border: none !important;
+    background-color: #9ec8b93c !important;
+}

@@ -13,6 +13,13 @@ $listGroup->execute();
 $groups = $listGroup->fetchAll();
 ?>
 
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Music Bands</title>
+    <link href="style/style.css" rel="stylesheet">
+</head>
 <div class="form-check form-switch " id="grpdiv">
     <input class="form-check-input" type="checkbox" role="switch" name="groupCheck" id="groupCheck" onclick="groupCheck()">
     <label class="form-check-label" for="groupCheck">Groupe</label>
