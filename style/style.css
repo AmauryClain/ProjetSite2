@@ -1,0 +1,62 @@
+/* Colors : */
+/* #092635
+#1B4242
+#5C8374
+#9EC8B9 */
+
+body {
+    background: linear-gradient(60deg, #092635 0%, #153232 100%) !important;
+}
+
+.homemaindiv {
+    color: #ceffeecc;
+    background: linear-gradient(60deg, #9ec8b91d 0%, #9ec8b93f 100%) !important;
+    border-radius: 5px !important;
+    vertical-align: center;
+    padding: 5px;
+    margin-top: 20px;
+}
+.navbar {
+    background: linear-gradient(60deg, #9ec8b91d 0%, #9ec8b93f 100%) !important;
+    transition: background-position 0.5s ease-in-out !important;
+    background-size: 200% 200% !important;
+}
+
+.navbar a {
+    font-weight: 700;
+    color: #ceffeecc !important;
+}
+
+.navbar:hover {
+    background-position: 50% 0 !important;
+}
+
+.btnsearch .btn, .searchdiv .btn {
+    color: #ceffeecc !important;
+    border: none !important;
+    background-color: #9ec8b921 !important;
+}
+.btnsearch .btn:hover, .searchdiv .btn:hover {
+    border: none !important;
+    background-color: #9ec8b93c !important;
+}
+
+.card {
+    background-color: #9ec8b921 !important; 
+    color: #ceffeecc !important;
+    transition: all 0.07s ease-out;
+}
+
+.card:hover {
+    background-color: #9ec8b93c !important;
+    transition: all 0.07s ease-in;
+}
+
+/* groupe.php */
+.form-check {
+    color: #ceffeecc;
+}
+
+.group_form_container {
+    color: #ceffeecc;
+}

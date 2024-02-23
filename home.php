@@ -8,6 +8,12 @@ include('connection.php');
 @$searchType = $_GET['searchType'];
 $displaySearch = "";
 
+
+// Initialisation des variables de display
+$displayGrp = "no";
+$displayMem = "no";
+$displayAlb = "no";
+
 // Recherche groupes
 if ($searchType == "grp") {
     $displaySearch = "yes";
@@ -18,7 +24,10 @@ if (isset($submit) && !empty(trim($keywords)) && $searchType == "grp") {
         $kw[$i] = "g.grp_name like '%" . $words[$i] . "%'";
     }
     include('connection.php');
-    $res = $mysqlClient->prepare('select g.grp_createdate, g.grp_name, mgr_name from groupe g inner join grp_genre gg on gg.grp_id = g.grp_id inner join music_genre mg on mg.mgr_id = gg.mgr_id where ' . implode(' or ', $kw) . ' order by g.grp_name asc');
+    $res = $mysqlClient->prepare('select g.grp_createdate, g.grp_name, mgr_name 
+    from groupe g 
+    inner join grp_genre gg on gg.grp_id = g.grp_id inner join music_genre mg on mg.mgr_id = gg.mgr_id 
+    where ' . implode(' or ', $kw) . ' order by g.grp_name asc');
     $res->setFetchMode(PDO::FETCH_ASSOC);
     $res->execute();
     $tab = $res->fetchAll();
@@ -32,21 +41,25 @@ if (isset($submit) && !empty(trim($keywords)) && $searchType == "grp") {
 // Recherche musiciens
 if ($searchType == "mem") {
     $displaySearch = "yes";
-
-    if (isset($submit) && !empty(trim($keywords))) {
-        $words = explode(" ", trim($keywords));
-        $kw = array_map(function ($word) {
-            return "CONCAT(m.mbr_firstName, ' ', m.mbr_lastName) LIKE '%" . $word . "%'";
-        }, $words);
-
-        include('connection.php');
-        $res = $mysqlClient->prepare('SELECT m.mbr_firstName, m.mbr_lastName, m.mbr_nickname, mbr_role, g.grp_name, m.mbr_birthdate, m.mbr_joinDate FROM membre m inner join grp_membre gm on gm.mbr_id = m.mbr_id inner join groupe g on g.grp_id = gm.grp_id WHERE ' . implode(' OR ', $kw));
-        $res->setFetchMode(PDO::FETCH_ASSOC);
-        $res->execute();
-        $tab = $res->fetchAll();
-        $displayMem = "yes";
-    }
 }
+if (isset($submit) && !empty(trim($keywords)) && $searchType == "mem") {
+    $words = explode(" ", trim($keywords));
+    $kw = array_map(function ($word) {
+        return "CONCAT(m.mbr_firstName, ' ', m.mbr_lastName) LIKE '%" . $word . "%'";
+    }, $words);
+
+    include('connection.php');
+    $res = $mysqlClient->prepare('SELECT m.mbr_firstName, m.mbr_lastName, m.mbr_nickname, mbr_role, g.grp_name, m.mbr_birthdate, m.mbr_joinDate 
+    FROM membre m 
+    INNER JOIN grp_membre gm ON gm.mbr_id = m.mbr_id 
+    INNER JOIN groupe g ON g.grp_id = gm.grp_id 
+    WHERE ' . implode(' OR ', $kw));
+    $res->setFetchMode(PDO::FETCH_ASSOC);
+    $res->execute();
+    $tab = $res->fetchAll();
+    $displayMem = "yes";
+}
+
 // Recherche albums
 if ($searchType == "alb") {
     $displaySearch = "yes";
@@ -57,7 +70,9 @@ if (isset($submit) && !empty(trim($keywords)) && $searchType == "alb") {
         $kw[$i] = "a.alb_name like '%" . $words[$i] . "%'";
     }
     include('connection.php');
-    $res = $mysqlClient->prepare('select a.alb_name, a.alb_createdate, g.grp_name from album a inner join groupe g on g.grp_id = a.grp_id where ' . implode(' or ', $kw));
+    $res = $mysqlClient->prepare('select a.alb_name, a.alb_createdate, g.grp_name 
+    from album a inner join groupe g on g.grp_id = a.grp_id 
+    where ' . implode(' or ', $kw));
     $res->setFetchMode(PDO::FETCH_ASSOC);
     $res->execute();
     $tab = $res->fetchAll();
@@ -67,7 +82,14 @@ if (isset($submit) && !empty(trim($keywords)) && $searchType == "alb") {
 
 
 ?>
-<div class="mx-5 h-100vh">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Music Bands</title>
+    <link href="style/style.css" rel="stylesheet">
+</head>
+<div class="mx-5 h-100vh homemaindiv">
     <h5 class="my-1">Que souhaitez-vous rechercher ?</h5>
     <form class="btnsearch my-3" method="get" action="">
         <input type="hidden" name="searchType" value="">
@@ -76,11 +98,12 @@ if (isset($submit) && !empty(trim($keywords)) && $searchType == "alb") {
         <button name="searchType" value="alb" type="submit" class="btn btn-secondary">Album</button>
     </form>
 
-    <form class="my-3 d-flex" role="search" name="fo" method="get" action="" <?php echo ($displaySearch == "yes") ? 'style="display: flex !important;"' : 'style="display: none !important;"'; ?>>
+    <form class="searchdiv my-3 d-flex" role="search" name="fo" method="get" action="" <?php echo ($displaySearch == "yes") ? 'style="display: flex !important;"' : 'style="display: none !important;"'; ?>>
         <input type="hidden" name="searchType" value="<?php echo htmlspecialchars($searchType); ?>">
         <input class="form-control me-2" type="search" name="keywords" placeholder="Search" value="<?php echo $keywords ?>" aria-label="Search">
         <button class="btn btn-outline-success" name="submit" type="submit">Search</button>
     </form>
+
     <!-- Affiche les groupes -->
     <?php if (@$displayGrp == "yes") {
     ?>
