@@ -184,7 +184,6 @@ $groups = $listGroup->fetchAll();
         // affichage
         var form = document.getElementById("albumForm");
         // element à cacher
-
         var groupCheck = document.getElementById("groupCheck");
         var memberCheck = document.getElementById("memberCheck");
         var groupform = document.getElementById("groupForm");

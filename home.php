@@ -68,7 +68,6 @@ if (isset($submit) && !empty(trim($keywords)) && $searchType == "alb") {
 
 ?>
 <div class="mx-5 h-100vh">
-
     <h5 class="my-1">Que souhaitez-vous rechercher ?</h5>
     <form class="btnsearch my-3" method="get" action="">
         <input type="hidden" name="searchType" value="">
